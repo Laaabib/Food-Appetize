@@ -2,14 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
-import { ShoppingCart, Menu, X, User } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, Search } from 'lucide-react';
 import { useCart } from '@/components/CartProvider';
+import SearchOverlay from '@/components/SearchOverlay';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { cartCount, setIsCartOpen } = useCart();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,7 +27,7 @@ export default function Header() {
     { name: 'Home', href: '/' },
     { name: 'Menu', href: '/menu' },
     { name: 'Offers', href: '/offers' },
-    { name: 'About', href: '/#about' },
+    { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
   ];
 
@@ -39,19 +43,28 @@ export default function Header() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex flex-1 justify-center space-x-8">
-          {navLinks.map((link) => (
-            <Link 
-              key={link.name} 
-              href={link.href}
-              className={`text-sm tracking-[1px] uppercase font-medium transition-colors ${link.name === 'Home' ? 'text-orange opacity-100' : 'text-warm-white opacity-80 hover:opacity-100 hover:text-orange'}`}
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link 
+                key={link.name} 
+                href={link.href}
+                className={`text-sm tracking-[1px] uppercase font-medium transition-colors ${isActive ? 'text-orange opacity-100' : 'text-warm-white opacity-80 hover:opacity-100 hover:text-orange'}`}
+              >
+                {link.name}
+              </Link>
+            )
+          })}
         </nav>
 
         {/* Actions Desktop */}
         <div className="hidden md:flex items-center gap-6">
+          <button 
+            onClick={() => setSearchOpen(true)}
+            className="text-warm-white hover:text-orange transition-colors"
+          >
+            <Search className="w-5 h-5" />
+          </button>
           <button 
             onClick={() => setIsCartOpen(true)}
             className="glass px-4 py-2 rounded-lg flex items-center gap-2 text-xs uppercase tracking-[0.5px] hover:border-orange transition-colors cursor-pointer"
@@ -65,6 +78,12 @@ export default function Header() {
 
         {/* Mobile Menu Toggle */}
         <div className="md:hidden flex items-center gap-4 z-50">
+          <button 
+             onClick={() => setSearchOpen(true)}
+             className="text-warm-white hover:text-orange transition-colors"
+          >
+             <Search className="w-5 h-5" />
+          </button>
           <button 
             onClick={() => setIsCartOpen(true)}
             className="glass p-2 rounded-lg relative hover:border-orange transition-colors"
@@ -95,16 +114,19 @@ export default function Header() {
             className="fixed inset-0 bg-off-black pt-24 px-6 flex flex-col z-40 border-b border-glass-border overflow-y-auto"
           >
             <nav className="flex flex-col gap-6 text-xl tracking-[1px] uppercase pb-10">
-              {navLinks.map((link) => (
-                <Link 
-                  key={link.name} 
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`border-b border-glass-border pb-4 ${link.name === 'Home' ? 'text-orange font-bold' : 'text-warm-white opacity-80'}`}
-                >
-                  {link.name}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link 
+                    key={link.name} 
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`border-b border-glass-border pb-4 ${isActive ? 'text-orange font-bold' : 'text-warm-white opacity-80 hover:text-orange'}`}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
               <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="mt-8 flex items-center gap-4 text-orange font-sans font-medium text-base">
                 <User className="w-5 h-5" />
                 <span>Login / Signup to your account</span>
@@ -113,6 +135,7 @@ export default function Header() {
           </motion.div>
         )}
       </AnimatePresence>
+      <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }

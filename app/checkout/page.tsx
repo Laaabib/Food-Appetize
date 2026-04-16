@@ -13,6 +13,7 @@ const paymentMethods = [
   { id: 'bkash', name: 'bKash', icon: Smartphone, color: 'bg-pink-600/10 text-pink-500 border-pink-500/30' },
   { id: 'nagad', name: 'Nagad', icon: Smartphone, color: 'bg-orange-600/10 text-orange-500 border-orange-500/30' },
   { id: 'rocket', name: 'Rocket', icon: Smartphone, color: 'bg-purple-600/10 text-purple-500 border-purple-500/30' },
+  { id: 'aamarpay', name: 'aamarPay', icon: CreditCard, color: 'bg-teal-600/10 text-teal-500 border-teal-500/30' },
   { id: 'card', name: 'Credit / Debit Card', icon: CreditCard, color: 'bg-blue-600/10 text-blue-400 border-blue-500/30' },
 ];
 
