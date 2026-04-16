@@ -15,7 +15,7 @@ const benefits = [
 
 export default function WhyChoose() {
   return (
-    <section className="py-24 bg-charcoal text-white overflow-hidden relative border-t border-glass-border">
+    <section id="about" className="py-24 bg-charcoal text-white overflow-hidden relative border-t border-glass-border">
       <div className="absolute top-0 right-0 w-[40vw] h-[40vw] bg-orange/5 rounded-full blur-[100px] pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto px-6 lg:px-14 relative z-10">

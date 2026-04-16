@@ -4,9 +4,11 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/components/CartProvider';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function CartSidebar() {
   const { isCartOpen, setIsCartOpen, items, removeFromCart, updateQuantity, cartTotal } = useCart();
+  const router = useRouter();
 
   return (
     <AnimatePresence>
@@ -102,7 +104,7 @@ export default function CartSidebar() {
                 <button 
                   onClick={() => {
                     setIsCartOpen(false);
-                    window.location.href = '/checkout';
+                    router.push('/checkout');
                   }}
                   className="w-full bg-orange hover:bg-orange-light text-white py-4 rounded-xl font-bold uppercase tracking-widest text-sm transition-colors cursor-pointer"
                 >
