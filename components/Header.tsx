@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingCart, Menu, X, User } from 'lucide-react';
+import { useCart } from '@/components/CartProvider';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { cartCount, setIsCartOpen } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,10 +21,10 @@ export default function Header() {
 
   const navLinks = [
     { name: 'Home', href: '/' },
-    { name: 'Menu', href: '#menu' },
-    { name: 'Offers', href: '#offers' },
-    { name: 'About', href: '#about' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Menu', href: '/menu' },
+    { name: 'Offers', href: '/offers' },
+    { name: 'About', href: '/#about' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   return (
@@ -50,21 +52,29 @@ export default function Header() {
 
         {/* Actions Desktop */}
         <div className="hidden md:flex items-center gap-6">
-          <button className="glass px-4 py-2 rounded-lg flex items-center gap-2 text-xs uppercase tracking-[0.5px]">
-            <span className="text-orange font-bold text-base">🛒</span> 2 Items
+          <button 
+            onClick={() => setIsCartOpen(true)}
+            className="glass px-4 py-2 rounded-lg flex items-center gap-2 text-xs uppercase tracking-[0.5px] hover:border-orange transition-colors cursor-pointer"
+          >
+            <span className="text-orange font-bold text-base">🛒</span> {cartCount} Items
           </button>
-          <button className="bg-orange border-none text-white px-4 py-2 rounded-lg text-xs uppercase tracking-[0.5px] font-bold">
+          <Link href="/login" className="bg-orange border-none text-white px-4 py-2 rounded-lg text-xs uppercase tracking-[0.5px] font-bold">
             Login
-          </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Toggle */}
         <div className="md:hidden flex items-center gap-4 z-50">
-          <button className="glass p-2 rounded-lg relative">
+          <button 
+            onClick={() => setIsCartOpen(true)}
+            className="glass p-2 rounded-lg relative hover:border-orange transition-colors"
+          >
             <ShoppingCart className="w-5 h-5 text-warm-white" />
-            <span className="absolute -top-1 -right-1 bg-orange text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-              2
-            </span>
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-orange text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
           </button>
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -82,9 +92,9 @@ export default function Header() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-0 left-0 right-0 bg-off-black h-screen pt-24 px-6 flex flex-col z-40 border-b border-glass-border"
+            className="fixed inset-0 bg-off-black pt-24 px-6 flex flex-col z-40 border-b border-glass-border overflow-y-auto"
           >
-            <nav className="flex flex-col gap-6 text-xl tracking-[1px] uppercase">
+            <nav className="flex flex-col gap-6 text-xl tracking-[1px] uppercase pb-10">
               {navLinks.map((link) => (
                 <Link 
                   key={link.name} 
@@ -95,10 +105,10 @@ export default function Header() {
                   {link.name}
                 </Link>
               ))}
-              <div className="mt-8 flex items-center gap-4 text-orange font-sans font-medium text-base">
+              <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="mt-8 flex items-center gap-4 text-orange font-sans font-medium text-base">
                 <User className="w-5 h-5" />
                 <span>Login / Signup to your account</span>
-              </div>
+              </Link>
             </nav>
           </motion.div>
         )}

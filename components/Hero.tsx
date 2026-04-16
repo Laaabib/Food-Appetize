@@ -102,20 +102,6 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* App Promo overlapping the visual area */}
-            <div className="absolute -bottom-10 lg:bottom-[50px] right-4 lg:-right-4 w-[240px] bg-cream text-charcoal p-5 rounded-[20px] shadow-2xl flex flex-col gap-2 z-20 hover:-translate-y-2 transition-transform duration-300">
-              <h4 className="font-serif text-[18px] font-bold">Get the App</h4>
-              <p className="text-[12px] opacity-80 leading-snug">Download our mobile app and track your order in real-time.</p>
-              <div className="flex gap-2 mt-2">
-                <button className="bg-charcoal text-white text-[10px] px-2.5 py-1.5 rounded-md flex-1 uppercase tracking-wider font-semibold hover:bg-black transition-colors">
-                  iOS Store
-                </button>
-                <button className="bg-charcoal text-white text-[10px] px-2.5 py-1.5 rounded-md flex-1 uppercase tracking-wider font-semibold hover:bg-black transition-colors">
-                  Play Store
-                </button>
-              </div>
-            </div>
-
           </motion.div>
 
         </div>

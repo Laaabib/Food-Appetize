@@ -39,11 +39,10 @@ export default function Footer() {
           <div>
             <h4 className="font-serif font-bold text-lg mb-6 tracking-wide">Quick Links</h4>
             <ul className="space-y-4">
-              <li><Link href="#about" className="text-warm-white/60 hover:text-orange transition-colors text-[14px]">About FoodAppetize</Link></li>
-              <li><Link href="#menu" className="text-warm-white/60 hover:text-orange transition-colors text-[14px]">Our Menu</Link></li>
-              <li><Link href="#offers" className="text-warm-white/60 hover:text-orange transition-colors text-[14px]">Special Offers</Link></li>
-              <li><Link href="#" className="text-warm-white/60 hover:text-orange transition-colors text-[14px]">Delivery Zones</Link></li>
-              <li><Link href="#" className="text-warm-white/60 hover:text-orange transition-colors text-[14px]">Privacy Policy</Link></li>
+              <li><Link href="/" className="text-warm-white/60 hover:text-orange transition-colors text-[14px]">Home</Link></li>
+              <li><Link href="/menu" className="text-warm-white/60 hover:text-orange transition-colors text-[14px]">Our Menu</Link></li>
+              <li><Link href="/offers" className="text-warm-white/60 hover:text-orange transition-colors text-[14px]">Special Offers</Link></li>
+              <li><Link href="/contact" className="text-warm-white/60 hover:text-orange transition-colors text-[14px]">Contact Us</Link></li>
             </ul>
           </div>
 
