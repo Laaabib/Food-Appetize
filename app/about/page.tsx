@@ -18,7 +18,7 @@ export default function AboutPage() {
           <div className="relative h-[500px] w-full rounded-[40px] overflow-hidden glass p-2 border border-glass-border">
             <div className="relative h-full w-full rounded-[32px] overflow-hidden">
               <Image 
-                src="https://images.unsplash.com/photo-1556910103-1c02745a872f?auto=format&fit=crop&w=800&q=80" 
+                src="https://picsum.photos/seed/kitchen/800/800" 
                 alt="Our Cloud Kitchen" 
                 fill 
                 className="object-cover"

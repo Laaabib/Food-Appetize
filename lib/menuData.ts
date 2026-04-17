@@ -41,4 +41,18 @@ export const menuCategories = [
   }
 ];
 
-export const allDishes = menuCategories.flatMap(c => c.items);
+export const groceryCategories = [
+  {
+    name: 'Groceries',
+    items: [
+      { id: 'm16', name: 'Nestle Cerelac Wheat & Apple', desc: 'Nutritious baby cereal for 6+ months, 400g pack', price: 450, rating: 4.9, img: 'https://picsum.photos/seed/cerelac/400/400' },
+      { id: 'm17', name: 'Nido Growing Up Milk', desc: 'Specially formulated milk powder for growing children, 400g pouch', price: 550, rating: 4.8, img: 'https://picsum.photos/seed/nido/400/400' },
+      { id: 'm18', name: 'Premium Beef (Bone-in)', desc: 'Fresh, halal, and premium quality beef cuts - 1kg', price: 780, rating: 4.8, img: 'https://images.unsplash.com/photo-1603048297172-c92544798d5e?auto=format&fit=crop&w=400&q=80' },
+      { id: 'm19', name: 'Desi Local Chicken', desc: 'Farm-fresh whole local chicken, dressed and cleaned (~800g)', price: 580, rating: 4.7, img: 'https://picsum.photos/seed/chickenraw/400/400' },
+      { id: 'm20', name: 'Radhuni Roast Masala', desc: 'Authentic spice mix for traditional deshi chicken roast', price: 65, rating: 4.9, img: 'https://picsum.photos/seed/masala1/400/400' },
+      { id: 'm21', name: 'Radhuni Biryani Masala', desc: 'Premium quality spice blend for perfect Biryani at home', price: 75, rating: 4.8, img: 'https://picsum.photos/seed/masala2/400/400' },
+    ]
+  }
+];
+
+export const allDishes = [...menuCategories.flatMap(c => c.items), ...groceryCategories.flatMap(c => c.items)];

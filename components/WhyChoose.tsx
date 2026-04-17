@@ -58,7 +58,7 @@ export default function WhyChoose() {
             className="relative h-[600px] w-full rounded-[40px] overflow-hidden"
           >
             <Image 
-              src="https://images.unsplash.com/photo-1556910103-1c02745a872f?auto=format&fit=crop&w=800&q=80" 
+              src="https://picsum.photos/seed/kitchen/800/800" 
               alt="Cloud Kitchen" 
               fill 
               className="object-cover opacity-80"
