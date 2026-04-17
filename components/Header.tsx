@@ -36,8 +36,8 @@ export default function Header() {
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'h-[80px] bg-gradient-to-b from-off-black to-transparent backdrop-blur-md' : 'h-[80px] bg-gradient-to-b from-off-black to-transparent'}`}>
       <div className="max-w-7xl mx-auto h-full px-6 lg:px-14 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 z-50 uppercase tracking-widest">
-          <span className="font-serif font-bold text-2xl tracking-[1px] text-warm-white">
+        <Link href="/" className="flex items-center gap-2 z-50 uppercase tracking-widest shrink-0">
+          <span className="font-serif font-bold text-xl md:text-2xl tracking-[1px] text-warm-white">
             FOOD<span className="text-orange">APPETIZE</span>
           </span>
         </Link>
@@ -108,32 +108,42 @@ export default function Header() {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 bg-off-black pt-24 px-6 flex flex-col z-40 border-b border-glass-border overflow-y-auto"
-          >
-            <nav className="flex flex-col gap-6 text-xl tracking-[1px] uppercase pb-10">
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link 
-                    key={link.name} 
-                    href={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`border-b border-glass-border pb-4 ${isActive ? 'text-orange font-bold' : 'text-warm-white opacity-80 hover:text-orange'}`}
-                  >
-                    {link.name}
-                  </Link>
-                );
-              })}
-              <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="mt-8 flex items-center gap-4 text-orange font-sans font-medium text-base">
-                <User className="w-5 h-5" />
-                <span>Login / Signup to your account</span>
-              </Link>
-            </nav>
-          </motion.div>
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30"
+            />
+            <motion.div 
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: '100%' }}
+              transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+              className="fixed top-0 right-0 h-full bg-off-black pt-24 px-6 flex flex-col z-40 border-l border-glass-border overflow-y-auto w-full max-w-sm"
+            >
+              <nav className="flex flex-col gap-6 text-xl tracking-[1px] uppercase pb-10">
+                {navLinks.map((link) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <Link 
+                      key={link.name} 
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`border-b border-glass-border pb-4 transition-colors ${isActive ? 'text-orange font-bold' : 'text-warm-white opacity-80 hover:text-orange'}`}
+                    >
+                      {link.name}
+                    </Link>
+                  );
+                })}
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="mt-8 flex items-center gap-4 text-orange font-sans font-medium text-base">
+                  <User className="w-5 h-5" />
+                  <span>Login / Signup to your account</span>
+                </Link>
+              </nav>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />

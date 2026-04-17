@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useCart } from '@/components/CartProvider';
 import { motion } from 'motion/react';
-import { CheckCircle2, ChevronLeft, CreditCard, Smartphone } from 'lucide-react';
+import { CheckCircle2, ChevronLeft, CreditCard, Smartphone, MapPin, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -22,9 +22,49 @@ export default function CheckoutPage() {
   const [selectedMethod, setSelectedMethod] = useState('bkash');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  
+  const [address, setAddress] = useState('');
+  const [isFetchingLocation, setIsFetchingLocation] = useState(false);
+  const [locationError, setLocationError] = useState('');
 
   const deliveryFee = 60;
   const totalAmount = cartTotal + deliveryFee;
+
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationError('Geolocation is not supported by your browser');
+      return;
+    }
+
+    setIsFetchingLocation(true);
+    setLocationError('');
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          // Use OpenStreetMap Nominatim for free reverse geocoding
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          const data = await res.json();
+          if (data && data.display_name) {
+            setAddress(data.display_name);
+          } else {
+            setAddress(`${latitude}, ${longitude}`); // fallback to coordinates
+          }
+        } catch (e) {
+          setAddress(`${latitude}, ${longitude}`); // fallback to coordinates
+        } finally {
+          setIsFetchingLocation(false);
+        }
+      },
+      (error) => {
+        console.error(error);
+        setIsFetchingLocation(false);
+        setLocationError('Unable to retrieve your location. Please check browser permissions.');
+      },
+      { timeout: 10000, maximumAge: 0 }
+    );
+  };
 
   const handleCheckout = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,19 +119,19 @@ export default function CheckoutPage() {
         </div>
 
         {items.length === 0 ? (
-          <div className="glass p-12 rounded-[32px] text-center">
+          <div className="glass p-8 md:p-12 rounded-[32px] text-center">
             <h2 className="text-2xl font-serif text-warm-white mb-4">Your cart is empty</h2>
             <p className="text-warm-white/60 mb-8">Add some delicious meals to proceed with checkout.</p>
-            <Link href="/menu" className="bg-orange text-white px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-sm transition-colors">
+            <Link href="/menu" className="bg-orange text-white px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-sm transition-colors cursor-pointer inline-block">
               Browse Menu
             </Link>
           </div>
         ) : (
-          <form onSubmit={handleCheckout} className="grid lg:grid-cols-3 gap-10">
+          <form onSubmit={handleCheckout} className="grid lg:grid-cols-3 gap-8 lg:gap-10">
             {/* Left Column: Form & Payment */}
             <div className="lg:col-span-2 space-y-8">
               {/* Delivery Details */}
-              <div className="glass p-8 rounded-[32px]">
+              <div className="glass p-6 md:p-8 rounded-[32px]">
                 <h2 className="text-2xl font-serif text-warm-white mb-6">Delivery Details</h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
@@ -102,15 +142,36 @@ export default function CheckoutPage() {
                     <label className="text-xs uppercase tracking-wider font-semibold text-warm-white/80">Phone Number</label>
                     <input required type="tel" className="bg-off-black border border-glass-border rounded-xl px-4 py-3 text-warm-white focus:outline-none focus:border-orange transition-colors" placeholder="+880 17XXXXXXXX" />
                   </div>
-                  <div className="md:col-span-2 flex flex-col gap-2">
-                    <label className="text-xs uppercase tracking-wider font-semibold text-warm-white/80">Full Address</label>
-                    <textarea required rows={3} className="bg-off-black border border-glass-border rounded-xl px-4 py-3 text-warm-white focus:outline-none focus:border-orange transition-colors resize-none" placeholder="House/Flat No, Road, Area (e.g. Gulshan, Dhaka)"></textarea>
+                  <div className="md:col-span-2 flex flex-col gap-2 relative">
+                    <div className="flex justify-between items-center">
+                      <label className="text-xs uppercase tracking-wider font-semibold text-warm-white/80">Full Address</label>
+                      <button 
+                        type="button" 
+                        onClick={handleGetLocation}
+                        disabled={isFetchingLocation}
+                        className="text-xs text-orange hover:text-orange-light flex items-center gap-1.5 transition-colors disabled:opacity-50"
+                      >
+                        {isFetchingLocation ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <MapPin className="w-3.5 h-3.5" />}
+                        Use Current Location
+                      </button>
+                    </div>
+                    <textarea 
+                      required 
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      rows={3} 
+                      className="bg-off-black border border-glass-border rounded-xl px-4 py-3 text-warm-white focus:outline-none focus:border-orange transition-colors resize-none" 
+                      placeholder="House/Flat No, Road, Area (e.g. Gulshan, Dhaka)"
+                    ></textarea>
+                    {locationError && (
+                      <span className="text-xs text-red-400 absolute -bottom-5 right-0">{locationError}</span>
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* Payment Methods */}
-              <div className="glass p-8 rounded-[32px]">
+              <div className="glass p-6 md:p-8 rounded-[32px]">
                 <h2 className="text-2xl font-serif text-warm-white mb-6">Payment Method (Bangladesh)</h2>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {paymentMethods.map((method) => {
@@ -120,18 +181,18 @@ export default function CheckoutPage() {
                         key={method.id}
                         type="button"
                         onClick={() => setSelectedMethod(method.id)}
-                        className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all ${
+                        className={`flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-xl border text-left transition-all ${
                           selectedMethod === method.id 
                             ? 'border-orange bg-orange/10' 
                             : 'border-glass-border bg-off-black hover:border-warm-white/30'
                         }`}
                       >
-                        <div className={`p-3 rounded-lg border ${method.color}`}>
-                          <MethodIcon className="w-6 h-6" />
+                        <div className={`p-2 md:p-3 rounded-lg border shrink-0 ${method.color}`}>
+                          <MethodIcon className="w-5 h-5 md:w-6 md:h-6" />
                         </div>
-                        <span className="font-semibold text-warm-white opacity-90">{method.name}</span>
+                        <span className="font-semibold text-sm md:text-base text-warm-white opacity-90 truncate">{method.name}</span>
                         {selectedMethod === method.id && (
-                          <CheckCircle2 className="w-5 h-5 text-orange ml-auto" />
+                          <CheckCircle2 className="w-5 h-5 text-orange ml-auto shrink-0" />
                         )}
                       </button>
                     );
@@ -142,7 +203,7 @@ export default function CheckoutPage() {
 
             {/* Right Column: Order Summary */}
             <div className="relative">
-              <div className="glass p-8 rounded-[32px] sticky top-[100px]">
+              <div className="glass p-6 md:p-8 rounded-[32px] sticky top-[100px]">
                 <h2 className="text-2xl font-serif text-warm-white mb-6">Order Summary</h2>
                 
                 <div className="space-y-4 mb-6 max-h-[30vh] overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-glass-border [&::-webkit-scrollbar-track]:bg-transparent">

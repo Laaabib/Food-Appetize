@@ -6,9 +6,9 @@ import { Search, MapPin, Clock, Star, ShieldCheck } from 'lucide-react';
 
 export default function Hero() {
   return (
-    <section className="relative pt-[100px] lg:pt-[120px] pb-20 min-h-[calc(100vh-80px)] xl:min-h-[768px] flex flex-col justify-center overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-14 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 items-center relative">
+    <section className="relative pt-[120px] lg:pt-[120px] pb-16 lg:pb-20 min-h-[calc(100vh-80px)] xl:min-h-[768px] flex flex-col justify-center overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-14 w-full">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center relative">
           
           {/* Text Content */}
           <motion.div 
@@ -17,34 +17,34 @@ export default function Hero() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex flex-col pr-0 lg:pr-10 relative z-10"
           >
-            <h1 className="text-5xl lg:text-[56px] font-serif font-normal leading-[1.1] mb-5 text-white">
+            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-serif font-normal leading-[1.1] mb-4 lg:mb-5 text-white">
               Delicious Meals from FoodAppetize Delivered.
             </h1>
 
-            <p className="text-lg text-white/70 font-light mb-10 leading-[1.6]">
+            <p className="text-base sm:text-lg text-white/70 font-light mb-8 lg:mb-10 leading-[1.6]">
               From gourmet burgers to authentic Kacchi biryani — enjoy fresh meals prepared in our world-class smart cloud kitchen.
             </p>
 
-            <div className="glass rounded-full flex w-full max-w-[500px] mb-8 p-2">
+            <div className="glass rounded-full flex w-full max-w-[500px] mb-8 p-1.5 sm:p-2">
               <input 
                 type="text" 
                 placeholder="Enter delivery address..." 
-                className="bg-transparent border-none px-6 py-3 text-white flex-1 text-[15px] focus:outline-none placeholder:text-white/50"
+                className="bg-transparent border-none px-4 sm:px-6 py-2 sm:py-3 text-white flex-1 text-sm sm:text-[15px] focus:outline-none placeholder:text-white/50 w-full"
               />
-              <button className="bg-orange text-white rounded-full px-8 py-3 font-semibold text-sm cursor-pointer whitespace-nowrap hover:bg-orange-light transition-colors">
+              <button className="bg-orange text-white rounded-full px-5 sm:px-8 py-2 sm:py-3 font-semibold text-xs sm:text-sm cursor-pointer whitespace-nowrap hover:bg-orange-light transition-colors">
                 Find Food
               </button>
             </div>
 
-            <div className="flex flex-wrap gap-4">
-              <div className="glass px-4 py-2 rounded-lg flex items-center gap-2 text-xs uppercase tracking-[0.5px]">
-                <span className="text-orange font-bold text-sm">⏱</span> 25-35 MIN
+            <div className="flex flex-wrap gap-3 sm:gap-4">
+              <div className="glass px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 text-[10px] sm:text-xs uppercase tracking-[0.5px]">
+                <span className="text-orange font-bold text-xs sm:text-sm">⏱</span> 25-35 MIN
               </div>
-              <div className="glass px-4 py-2 rounded-lg flex items-center gap-2 text-xs uppercase tracking-[0.5px]">
-                <span className="text-orange font-bold text-sm">🌿</span> 100% HALAL
+              <div className="glass px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 text-[10px] sm:text-xs uppercase tracking-[0.5px]">
+                <span className="text-orange font-bold text-xs sm:text-sm">🌿</span> 100% HALAL
               </div>
-              <div className="glass px-4 py-2 rounded-lg flex items-center gap-2 text-xs uppercase tracking-[0.5px]">
-                <span className="text-orange font-bold text-sm">★</span> 4.9 RATING
+              <div className="glass px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 text-[10px] sm:text-xs uppercase tracking-[0.5px]">
+                <span className="text-orange font-bold text-xs sm:text-sm">★</span> 4.9 RATING
               </div>
             </div>
           </motion.div>
@@ -54,7 +54,7 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-            className="relative h-[500px] w-full mt-12 lg:mt-0"
+            className="relative h-[380px] sm:h-[450px] lg:h-[500px] w-full mt-8 lg:mt-0"
           >
             <div className="grid grid-cols-2 gap-4 h-full">
               {/* Big Item */}
