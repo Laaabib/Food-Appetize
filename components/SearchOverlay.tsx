@@ -17,10 +17,14 @@ export default function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; on
       setTimeout(() => inputRef.current?.focus(), 100);
       document.body.style.overflow = 'hidden';
     } else {
-      setQuery('');
       document.body.style.overflow = 'unset';
     }
   }, [isOpen]);
+
+  const handleClose = () => {
+    setQuery('');
+    onClose();
+  };
 
   const filteredDishes = query.trim() === '' 
     ? [] 
@@ -57,7 +61,7 @@ export default function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; on
               )}
             </div>
             <button 
-              onClick={onClose}
+              onClick={handleClose}
               className="ml-6 text-warm-white/70 hover:text-white bg-charcoal p-3 rounded-full hover:bg-orange/20 hover:text-orange transition-colors"
             >
               <X className="w-6 h-6" />
@@ -78,7 +82,7 @@ export default function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; on
                       {filteredDishes.map(dish => (
                         <div
                           key={dish.id}
-                          className="glass rounded-[24px] p-4 flex flex-col h-full group hover:border-orange transition-colors duration-300 relative overflow-hidden"
+                          className="glass rounded-[24px] p-4 flex flex-col h-full group hover:border-orange hover:scale-[1.02] hover:shadow-[0_8px_24px_rgba(230,95,43,0.15)] transition-all duration-300 relative overflow-hidden"
                         >
                           <div className="relative w-full aspect-square rounded-[16px] overflow-hidden mb-4 bg-off-black">
                             <Image 
@@ -98,7 +102,12 @@ export default function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; on
                             <h3 className="text-lg font-serif font-semibold text-warm-white mb-1 line-clamp-1">{dish.name}</h3>
                             <p className="text-sm text-warm-white/50 line-clamp-2 mb-4">{dish.desc}</p>
                             <div className="mt-auto flex items-center justify-between pt-2">
-                              <p className="text-xl font-bold text-orange">৳ {dish.price}</p>
+                              <div className="flex flex-col">
+                                {(dish as any).originalPrice && (
+                                  <p className="text-xs text-warm-white/40 line-through mb-0.5">৳ {(dish as any).originalPrice}</p>
+                                )}
+                                <p className="text-xl font-bold text-orange">৳ {dish.price}</p>
+                              </div>
                               <button 
                                 onClick={() => {
                                   addToCart(dish as any);
@@ -117,7 +126,7 @@ export default function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; on
                      <div className="flex flex-col items-center justify-center pt-20 text-center">
                        <Search className="w-16 h-16 text-warm-white/10 mb-4" />
                        <h3 className="text-2xl font-serif text-warm-white mb-2">No dishes found</h3>
-                       <p className="text-warm-white/50">Try searching for something else like "pizza" or "beef".</p>
+                       <p className="text-warm-white/50">Try searching for something else like &quot;pizza&quot; or &quot;beef&quot;.</p>
                      </div>
                   )}
                 </>

@@ -60,7 +60,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h3 className="text-warm-white font-medium text-lg mb-1">Email Address</h3>
-                <p className="text-warm-white/60">support@foodappetize.com<br />careers@foodappetize.com</p>
+                <p className="text-warm-white/60">foodappetize@gmail.com<br />careers@foodappetize.com</p>
               </div>
             </div>
           </div>

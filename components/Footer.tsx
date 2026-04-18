@@ -20,16 +20,19 @@ export default function Footer() {
               We bring the best of international flavors and authentic Bangladeshi cuisine together. Premium quality, delivered fast to your door.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full glass flex items-center justify-center text-warm-white/80 hover:bg-orange hover:text-white transition-colors hover:border-orange">
+              <a href="https://facebook.com/FoodAppetize" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full glass flex items-center justify-center text-warm-white/80 hover:bg-orange hover:text-white transition-colors hover:border-orange">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full glass flex items-center justify-center text-warm-white/80 hover:bg-orange hover:text-white transition-colors hover:border-orange">
-                <Twitter className="w-4 h-4" />
+              <a href="https://tiktok.com/@foodappetize" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full glass flex items-center justify-center text-warm-white/80 hover:bg-orange hover:text-white transition-colors hover:border-orange cursor-pointer">
+                {/* Fallback TikTok SVG since it's not in standard lucide sometimes, or we can use an internal icon, but using custom SVG for perfect match */}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                  <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                </svg>
               </a>
-              <a href="#" className="w-10 h-10 rounded-full glass flex items-center justify-center text-warm-white/80 hover:bg-orange hover:text-white transition-colors hover:border-orange">
+              <a href="https://instagram.com/food.appetize" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full glass flex items-center justify-center text-warm-white/80 hover:bg-orange hover:text-white transition-colors hover:border-orange">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full glass flex items-center justify-center text-warm-white/80 hover:bg-orange hover:text-white transition-colors hover:border-orange">
+              <a href="https://youtube.com/@foodappetize" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full glass flex items-center justify-center text-warm-white/80 hover:bg-orange hover:text-white transition-colors hover:border-orange">
                 <Youtube className="w-4 h-4" />
               </a>
             </div>
@@ -65,7 +68,7 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-orange shrink-0" />
                 <span className="text-warm-white/60 text-[14px]">
-                  hello@foodappetize.com
+                  foodappetize@gmail.com
                 </span>
               </li>
             </ul>

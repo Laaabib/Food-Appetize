@@ -31,5 +31,25 @@
   .shadow-elegant {
     box-shadow: 0 20px 40px -20px rgba(230, 95, 43, 0.3);
   }
+  
+  /* Custom Range Slider Webkit Resets */
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: var(--color-orange);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(230, 95, 43, 0.5);
+  }
+  input[type=range]::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: var(--color-orange);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 10px rgba(230, 95, 43, 0.5);
+  }
 }
 
