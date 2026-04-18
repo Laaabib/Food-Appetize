@@ -3,8 +3,9 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { Star, ShoppingBag, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Star, ShoppingBag, ChevronRight, ChevronLeft, Heart } from 'lucide-react';
 import { useCart } from '@/components/CartProvider';
+import { useWishlist } from '@/components/WishlistProvider';
 
 const sliderContent = [
   {
@@ -38,6 +39,7 @@ const sliderContent = [
 
 export default function PopularDishes() {
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   
   return (
     <section className="py-24 bg-charcoal border-t border-glass-border overflow-hidden">
@@ -81,6 +83,14 @@ export default function PopularDishes() {
                             referrerPolicy="no-referrer"
                             draggable={false}
                           />
+                          <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md p-1.5 rounded-full z-10 pointer-events-auto">
+                            <button 
+                              onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(dish); }}
+                              className={`transition-colors flex items-center justify-center rounded-full p-1 ${isInWishlist(dish.id) ? 'text-red-500 hover:text-red-400' : 'text-warm-white/50 hover:text-red-400'}`}
+                            >
+                              <Heart className={`w-4 h-4 ${isInWishlist(dish.id) ? 'fill-red-500' : ''}`} />
+                            </button>
+                          </div>
                           <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-full flex items-center gap-1 z-10 pointer-events-none">
                             <Star className="w-3 h-3 fill-orange text-orange" />
                             <span className="text-xs font-bold text-white">{dish.rating}</span>

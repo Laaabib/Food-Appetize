@@ -1,11 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { Star, ShoppingBag } from 'lucide-react';
+import { Star, ShoppingBag, Heart } from 'lucide-react';
 import { useCart } from '@/components/CartProvider';
+import { useWishlist } from '@/components/WishlistProvider';
 
 export default function MenuCard({ item }: { item: any }) {
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
+
+  const isWished = isInWishlist(item.id);
 
   return (
     <div className="glass rounded-[24px] p-4 flex flex-col h-full group hover:border-orange hover:scale-[1.02] hover:shadow-[0_8px_24px_rgba(230,95,43,0.15)] transition-all duration-300 relative overflow-hidden">
@@ -17,7 +21,15 @@ export default function MenuCard({ item }: { item: any }) {
           className="object-cover group-hover:scale-105 transition-transform duration-500 opacity-90" 
           referrerPolicy="no-referrer"
         />
-        <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-full flex items-center gap-1">
+        <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md p-1.5 rounded-full z-10">
+          <button 
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(item); }}
+            className={`transition-colors flex items-center justify-center rounded-full p-1 ${isWished ? 'text-red-500 hover:text-red-400' : 'text-warm-white/50 hover:text-red-400'}`}
+          >
+            <Heart className={`w-4 h-4 ${isWished ? 'fill-red-500' : ''}`} />
+          </button>
+        </div>
+        <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-full flex items-center gap-1 z-10 pointer-events-none">
           <Star className="w-3 h-3 fill-orange text-orange" />
           <span className="text-xs font-bold text-white">{item.rating}</span>
         </div>

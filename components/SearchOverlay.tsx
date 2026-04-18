@@ -2,14 +2,16 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, X, Star, ShoppingBag } from 'lucide-react';
+import { Search, X, Star, ShoppingBag, Heart } from 'lucide-react';
 import { allDishes } from '@/lib/menuData';
 import { useCart } from '@/components/CartProvider';
+import { useWishlist } from '@/components/WishlistProvider';
 import Image from 'next/image';
 
 export default function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState('');
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -92,7 +94,15 @@ export default function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; on
                               className="object-cover group-hover:scale-105 transition-transform duration-500 opacity-90" 
                               referrerPolicy="no-referrer"
                             />
-                            <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-full flex items-center gap-1 z-10">
+                            <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md p-1.5 rounded-full z-10 pointer-events-auto">
+                              <button 
+                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(dish as any); }}
+                                className={`transition-colors flex items-center justify-center rounded-full p-1 ${isInWishlist(dish.id) ? 'text-red-500 hover:text-red-400' : 'text-warm-white/50 hover:text-red-400'}`}
+                              >
+                                <Heart className={`w-4 h-4 ${isInWishlist(dish.id) ? 'fill-red-500' : ''}`} />
+                              </button>
+                            </div>
+                            <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-full flex items-center gap-1 z-10 pointer-events-none">
                               <Star className="w-3 h-3 fill-orange text-orange" />
                               <span className="text-xs font-bold text-white">{dish.rating}</span>
                             </div>

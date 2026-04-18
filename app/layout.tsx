@@ -2,7 +2,9 @@ import type {Metadata} from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/components/CartProvider';
+import { WishlistProvider } from '@/components/WishlistProvider';
 import CartSidebar from '@/components/CartSidebar';
+import WishlistSidebar from '@/components/WishlistSidebar';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif' });
@@ -16,10 +18,13 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased bg-charcoal text-warm-white selection:bg-orange selection:text-white" suppressHydrationWarning>
-        <CartProvider>
-          {children}
-          <CartSidebar />
-        </CartProvider>
+        <WishlistProvider>
+          <CartProvider>
+            {children}
+            <CartSidebar />
+            <WishlistSidebar />
+          </CartProvider>
+        </WishlistProvider>
       </body>
     </html>
   );

@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
-import { ShoppingCart, Menu, X, User, Search, ChevronDown } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, Search, ChevronDown, Heart } from 'lucide-react';
 import { useCart } from '@/components/CartProvider';
+import { useWishlist } from '@/components/WishlistProvider';
 import SearchOverlay from '@/components/SearchOverlay';
 
 const navLinks = [
@@ -172,6 +173,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { cartCount, setIsCartOpen } = useCart();
+  const { wishlistCount, setIsWishlistOpen } = useWishlist();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -258,6 +260,17 @@ export default function Header() {
             <Search className="w-5 h-5" />
           </button>
           <button 
+            onClick={() => setIsWishlistOpen(true)}
+            className="text-warm-white hover:text-red-400 transition-colors relative"
+          >
+            <Heart className="w-5 h-5" />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                {wishlistCount}
+              </span>
+            )}
+          </button>
+          <button 
             onClick={() => setIsCartOpen(true)}
             className="glass px-3 py-2 rounded-lg flex items-center gap-2 text-[10px] xl:text-xs uppercase tracking-[0.5px] hover:border-orange transition-colors cursor-pointer whitespace-nowrap"
           >
@@ -275,6 +288,17 @@ export default function Header() {
              className="text-warm-white hover:text-orange transition-colors"
           >
              <Search className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={() => setIsWishlistOpen(true)}
+            className="text-warm-white hover:text-red-400 transition-colors relative"
+          >
+            <Heart className="w-5 h-5" />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                {wishlistCount}
+              </span>
+            )}
           </button>
           <button 
             onClick={() => setIsCartOpen(true)}
