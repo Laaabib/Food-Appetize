@@ -90,6 +90,15 @@ export const applianceCategories = [
       { id: 'm25', name: 'Premium Chef Knife Set', desc: '5-piece stainless steel kitchen knife set with wooden block', price: 2500, rating: 4.7, img: 'https://picsum.photos/seed/knifeset/400/400' },
       { id: 'm26', name: 'Non-stick Cookware Set', desc: '3-piece non-stick fry pan, wok, and saucepan set', price: 3200, originalPrice: 4000, rating: 4.8, img: 'https://picsum.photos/seed/cookware/400/400' },
     ]
+  },
+  {
+    name: 'Smart Gadgets',
+    slug: 'smart-gadgets',
+    items: [
+      { id: 'm27', name: 'Vision Digital Air Fryer', desc: '6L capacity smart digital air fryer with 8 presets', price: 5500, originalPrice: 6500, rating: 4.9, img: 'https://picsum.photos/seed/airfryer/400/400' },
+      { id: 'm28', name: 'Xiaomi Induction Cooker', desc: 'Ultra-thin smart induction cooktop with precise temperature control', price: 4200, rating: 4.8, img: 'https://picsum.photos/seed/induction/400/400' },
+      { id: 'm29', name: 'Walton Smart Rice Cooker', desc: '1.8L fuzzy logic smart rice cooker with soup and cake functions', price: 3100, originalPrice: 3500, rating: 4.7, img: 'https://picsum.photos/seed/ricecooker/400/400' },
+    ]
   }
 ];
 

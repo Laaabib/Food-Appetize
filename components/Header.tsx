@@ -37,12 +37,27 @@ const navLinks = [
     ]
   },
   { 
-    name: 'Groceries', 
-    href: '/groceries',
+    name: 'FA Mart', 
+    href: '#',
     subitems: [
-      { name: 'Baby Food', href: '/groceries/baby-food' },
-      { name: 'Raw Items', href: '/groceries/raw-items' },
-      { name: 'Bangladeshi Masalas', href: '/groceries/masalas' }
+      { 
+        name: 'Groceries', 
+        href: '/groceries',
+        subsubitems: [
+          { name: 'Baby Food', href: '/groceries#baby-food' },
+          { name: 'Raw Items', href: '/groceries#raw-items' },
+          { name: 'Bangladeshi Masalas', href: '/groceries#masalas' }
+        ]
+      },
+      { 
+        name: 'Kitchen & Appliance', 
+        href: '/kitchen-appliance',
+        subsubitems: [
+          { name: 'Small Appliances', href: '/kitchen-appliance#small' },
+          { name: 'Kitchen Utensils', href: '/kitchen-appliance#utensils' },
+          { name: 'Smart Gadgets', href: '/kitchen-appliance#gadgets' }
+        ]
+      }
     ]
   },
   { 
@@ -52,15 +67,6 @@ const navLinks = [
       { name: 'Bank Deals', href: '/offers#bank' },
       { name: 'BOGO', href: '/offers#bogo' },
       { name: 'Combos', href: '/offers#combos' }
-    ]
-  },
-  { 
-    name: 'Kitchen & Appliance', 
-    href: '/kitchen-appliance',
-    subitems: [
-      { name: 'Small Appliances', href: '/kitchen-appliance#small' },
-      { name: 'Kitchen Utensils', href: '/kitchen-appliance#utensils' },
-      { name: 'Smart Gadgets', href: '/kitchen-appliance#gadgets' }
     ]
   },
   { 
@@ -83,9 +89,16 @@ const navLinks = [
   },
 ];
 
-function MobileNavItem({ link, pathname, setMobileMenuOpen }: { link: any, pathname: string, setMobileMenuOpen: any }) {
+function MobileNavItem({ link, pathname, setMobileMenuOpen, setSearchOpen }: { link: any, pathname: string, setMobileMenuOpen: any, setSearchOpen?: any }) {
   const [isOpen, setIsOpen] = useState(false);
   const isActive = pathname === link.href;
+
+  const renderName = (name: string) => {
+    if (name === 'FA Mart') {
+      return <><span className="text-white">F</span><span className="text-orange">A</span> Mart</>;
+    }
+    return name;
+  };
 
   if (!link.subitems) {
     return (
@@ -94,20 +107,20 @@ function MobileNavItem({ link, pathname, setMobileMenuOpen }: { link: any, pathn
         onClick={() => setMobileMenuOpen(false)}
         className={`border-b border-glass-border pb-4 transition-colors ${isActive ? 'text-orange font-bold' : 'text-warm-white opacity-80 hover:text-orange'}`}
       >
-        {link.name}
+        {renderName(link.name)}
       </Link>
     );
   }
 
   return (
     <div className="border-b border-glass-border pb-4 flex flex-col">
-      <div className="flex justify-between items-center">
+      <div className={`flex justify-between items-center ${link.name === 'FA Mart' ? 'bg-orange/10 px-3 py-2 rounded-xl border border-orange/30' : ''}`}>
         <Link 
           href={link.href}
           onClick={() => setMobileMenuOpen(false)}
-          className={`transition-colors ${isActive ? 'text-orange font-bold' : 'text-warm-white opacity-80 hover:text-orange'}`}
+          className={`transition-colors ${isActive ? 'text-orange font-bold' : 'text-warm-white opacity-80 hover:text-orange'} ${link.name === 'FA Mart' ? 'opacity-100' : ''}`}
         >
-          {link.name}
+          {renderName(link.name)}
         </Link>
         <button onClick={() => setIsOpen(!isOpen)} className="text-warm-white/50 hover:text-orange p-2 -mr-2">
           <ChevronDown className={`w-6 h-6 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
@@ -122,6 +135,22 @@ function MobileNavItem({ link, pathname, setMobileMenuOpen }: { link: any, pathn
             className="flex flex-col gap-4 overflow-hidden"
           >
             <div className="pt-5 flex flex-col gap-4 pl-4 border-l-2 border-glass-border/50 ml-1">
+              {link.name === 'FA Mart' && setSearchOpen && (
+                <div className="pr-4 mb-2">
+                  <div className="relative">
+                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-warm-white/40" />
+                    <input 
+                      type="text" 
+                      placeholder="Search FA Mart..." 
+                      className="w-full bg-[#1a1a1a] border border-glass-border rounded-lg pl-9 pr-3 py-2.5 text-sm text-warm-white focus:outline-none focus:border-orange transition-colors placeholder:text-warm-white/40"
+                      onClick={() => {
+                        setSearchOpen(true);
+                        setMobileMenuOpen(false);
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
               {link.subitems.map((sub: any, idx: number) => (
                 <div key={idx} className="flex flex-col">
                   {sub.subsubitems ? (
@@ -168,20 +197,51 @@ function MobileNavItem({ link, pathname, setMobileMenuOpen }: { link: any, pathn
   );
 }
 
+import { getSupabase } from '@/lib/supabase';
+
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { cartCount, setIsCartOpen } = useCart();
   const { wishlistCount, setIsWishlistOpen } = useWishlist();
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Check local storage placeholder first
+    if (typeof window !== 'undefined') {
+      const logged = localStorage.getItem('isLoggedIn');
+      setIsLoggedIn(logged === 'true');
+    }
+
+    // Connect to Supabase Auth if the keys are available
+    const supabase = getSupabase();
+    if (supabase) {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        setIsLoggedIn(!!session);
+      });
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setIsLoggedIn(!!session);
+      });
+
+      // Cleanup
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 20);
+      };
+      window.addEventListener('scroll', handleScroll);
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+        subscription.unsubscribe();
+      };
+    } else {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 20);
+      };
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
   }, []);
 
   return (
@@ -198,15 +258,15 @@ export default function Header() {
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex flex-none justify-center space-x-3 xl:space-x-7 items-center h-full">
-          {navLinks.map((link) => {
+          {navLinks.filter(link => link.name !== 'Shop Tools' || isLoggedIn).map((link) => {
             const isActive = pathname === link.href;
             return (
               <div key={link.name} className="relative group h-full flex items-center">
                 <Link 
-                  href={link.href}
-                  className={`flex items-center gap-1 text-[10px] xl:text-xs tracking-[1px] uppercase font-bold transition-colors whitespace-nowrap ${isActive ? 'text-orange opacity-100' : 'text-warm-white opacity-80 hover:opacity-100 hover:text-orange'}`}
+                  href={link.href === '#' ? '/' : link.href}
+                  className={`flex items-center gap-1 text-[10px] xl:text-xs tracking-[1px] uppercase font-bold transition-colors whitespace-nowrap ${isActive ? 'text-orange opacity-100' : 'text-warm-white opacity-80 hover:opacity-100 hover:text-orange'} ${link.name === 'FA Mart' ? 'bg-orange/20 px-3 py-1.5 rounded-full border border-orange/40 shadow-[0_0_15px_rgba(230,95,43,0.2)]' : ''}`}
                 >
-                  {link.name}
+                  {link.name === 'FA Mart' ? <><span className="text-white transition-colors duration-300">F</span><span className="text-orange">A</span> Mart</> : link.name}
                   {link.subitems && <ChevronDown className="w-3.5 h-3.5 opacity-70 group-hover:text-orange transition-transform duration-300 group-hover:-rotate-180" />}
                 </Link>
                 
@@ -216,6 +276,21 @@ export default function Header() {
                     <div className="absolute -top-6 left-0 right-0 h-6 bg-transparent"></div>
                     <div className="absolute -top-[9px] left-1/2 -translate-x-1/2 border-x-8 border-b-8 border-x-transparent border-b-glass-border"></div>
                     <div className="absolute -top-[8px] left-1/2 -translate-x-1/2 border-x-8 border-b-8 border-x-transparent border-b-[#151515]"></div>
+                    
+                    {link.name === 'FA Mart' && (
+                      <div className="px-3 pb-2 mb-1 border-b border-glass-border">
+                        <div className="relative">
+                          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-warm-white/40" />
+                          <input 
+                            type="text" 
+                            placeholder="Search FA Mart..." 
+                            className="w-full bg-[#1a1a1a] border border-glass-border rounded-lg pl-8 pr-3 py-1.5 text-[11px] text-warm-white focus:outline-none focus:border-orange transition-colors placeholder:text-warm-white/40"
+                            onClick={() => setSearchOpen(true)}
+                          />
+                        </div>
+                      </div>
+                    )}
+
                     {link.subitems.map((sub, idx) => (
                       <div key={idx} className="relative group/sub">
                         <Link 
@@ -276,9 +351,23 @@ export default function Header() {
           >
             <span className="text-orange font-bold text-sm xl:text-base">🛒</span> {cartCount} Items
           </button>
-          <Link href="/login" className="bg-orange border-none text-white px-3 py-2 rounded-lg text-[10px] xl:text-xs uppercase tracking-[0.5px] font-bold block shrink-0">
-            Login
-          </Link>
+          {isLoggedIn ? (
+            <button 
+              onClick={async () => {
+                const supabase = getSupabase();
+                if (supabase) await supabase.auth.signOut();
+                localStorage.removeItem('isLoggedIn');
+                window.location.reload();
+              }}
+              className="bg-white/10 hover:bg-white/20 border-none text-white px-3 py-2 rounded-lg text-[10px] xl:text-xs uppercase tracking-[0.5px] font-bold block shrink-0 transition-colors"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link href="/login" className="bg-orange border-none text-white px-3 py-2 rounded-lg text-[10px] xl:text-xs uppercase tracking-[0.5px] font-bold block shrink-0">
+              Login
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -339,19 +428,32 @@ export default function Header() {
               className="fixed top-0 right-0 h-full bg-off-black pt-24 px-6 flex flex-col z-40 border-l border-glass-border overflow-y-auto w-full max-w-sm"
             >
               <nav className="flex flex-col gap-6 text-xl tracking-[1px] uppercase pb-10">
-                {navLinks.map((link) => (
+                {navLinks.filter(link => link.name !== 'Shop Tools' || isLoggedIn).map((link) => (
                   <MobileNavItem 
                     key={link.name} 
                     link={link} 
                     pathname={pathname} 
                     setMobileMenuOpen={setMobileMenuOpen} 
+                    setSearchOpen={setSearchOpen}
                   />
                 ))}
                 
-                <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="mt-8 flex items-center gap-4 text-orange font-sans font-medium text-base">
-                  <User className="w-5 h-5" />
-                  <span>Login / Signup to your account</span>
-                </Link>
+                {isLoggedIn ? (
+                  <button onClick={async () => {
+                    const supabase = getSupabase();
+                    if (supabase) await supabase.auth.signOut();
+                    localStorage.removeItem('isLoggedIn');
+                    window.location.reload();
+                  }} className="mt-8 flex items-center gap-4 text-warm-white/70 hover:text-white transition-colors font-sans font-medium text-base text-left">
+                    <User className="w-5 h-5" />
+                    <span>Logout</span>
+                  </button>
+                ) : (
+                  <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="mt-8 flex items-center gap-4 text-orange font-sans font-medium text-base">
+                    <User className="w-5 h-5" />
+                    <span>Login / Signup to your account</span>
+                  </Link>
+                )}
               </nav>
             </motion.div>
           </>

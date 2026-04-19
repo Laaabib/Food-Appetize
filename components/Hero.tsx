@@ -46,7 +46,7 @@ export default function Hero() {
   const prevSlide = () => setCurrent(current === 0 ? slides.length - 1 : current - 1);
 
   return (
-    <section className="relative w-full h-[calc(100vh-80px)] xl:h-[768px] mt-[80px] overflow-hidden bg-charcoal">
+    <section className="relative w-full h-[50vh] xl:h-[550px] mt-[80px] overflow-hidden bg-charcoal">
       <AnimatePresence initial={false}>
         <motion.div
           key={current}
